@@ -1,23 +1,19 @@
-# Use the Python Alpine base image
 FROM python:3-alpine3.20
 
-# Set the working directory
 WORKDIR /app
 
-# Copy application files
 COPY . /app
 
-# Install build dependencies
+# Install necessary build tools
 RUN apk add --no-cache \
     gcc \
     g++ \
     musl-dev \
     libffi-dev \
     openssl-dev \
-    make
+    build-base \
+    python3-dev
 
-# Install Python dependencies
-RUN pip install --upgrade pip && pip install -r requirements.txt
-
-# Set the command to run your app (replace with your app's entry point)
-CMD ["python", "app.py"]
+# Upgrade pip and install dependencies
+RUN pip install --upgrade pip && \
+    pip install --only-binary=:all: -r requirements.txt
